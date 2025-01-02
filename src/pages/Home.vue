@@ -67,12 +67,16 @@ const fetchItems = async () => {
       params
     })
 
-    items.value = data.map((obj) => ({
-      ...obj,
-      isFavorite: false,
-      favoriteId: null,
-      isAdded: false
-    }))
+    items.value = data.map((obj) => {
+      const existingItem = items.value.find((item) => item.id === obj.id)
+
+      return {
+        ...obj,
+        isFavorite: existingItem?.isFavorite || false, // Зберігаємо стан "обраного"
+        favoriteId: existingItem?.favoriteId || null, // Зберігаємо ID обраного
+        isAdded: existingItem?.isAdded || false // Зберігаємо стан доданого в кошик
+      }
+    })
   } catch (err) {
     console.log(err)
   }
