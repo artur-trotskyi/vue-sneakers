@@ -11,7 +11,7 @@ const props = defineProps({
   vatPrice: Number
 })
 
-const { cart, closeDrawer } = inject('cart')
+const { cart } = inject('cart')
 
 const isCreating = ref(false)
 const orderId = ref(null)
@@ -20,7 +20,7 @@ const createOrder = async () => {
   try {
     isCreating.value = true
 
-    const { data } = await axios.post(`https://604781a0efa572c1.mokky.dev/orders`, {
+    const { data } = await axios.post(`https://34a43f60562e814c.mokky.dev/orders`, {
       items: cart.value,
       totalPrice: props.totalPrice.value
     })
