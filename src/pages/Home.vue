@@ -1,11 +1,12 @@
 <script setup>
-import { reactive, watch, ref, onMounted } from 'vue'
+import { inject, reactive, watch, ref, onMounted } from 'vue'
+import { useFavorites } from '@/composables/useFavorites'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
-import { inject } from 'vue'
 import CardList from '../components/CardList.vue'
 
 const { cart, addToCart, removeFromCart } = inject('cart')
+const { addToFavorite } = useFavorites()
 
 const items = ref([])
 
@@ -29,28 +30,6 @@ const onChangeSelect = (event) => {
 const onChangeSearchInput = debounce((event) => {
   filters.searchQuery = event.target.value
 }, 300)
-
-const addToFavorite = async (item) => {
-  try {
-    if (!item.isFavorite) {
-      const obj = {
-        item_id: item.id
-      }
-
-      item.isFavorite = true
-
-      const { data } = await axios.post(`https://34a43f60562e814c.mokky.dev/favorites`, obj)
-
-      item.favoriteId = data.id
-    } else {
-      item.isFavorite = false
-      await axios.delete(`https://34a43f60562e814c.mokky.dev/favorites/${item.favoriteId}`)
-      item.favoriteId = null
-    }
-  } catch (err) {
-    console.log(err)
-  }
-}
 
 const fetchFavorites = async () => {
   try {
